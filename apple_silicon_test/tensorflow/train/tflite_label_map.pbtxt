@@ -1,0 +1,10 @@
+item {
+    name: "bullet",
+    id: 1,
+    display_name: "bullet"
+}
+item {
+    name: "target",
+    id: 2,
+    display_name: "target"
+}
