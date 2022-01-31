@@ -143,12 +143,12 @@ def SIFT(src):
 
 
 def main():
-    src = cv2.imread("../../img/1.jpeg")
-    #src_rotation = cv2.rotate(src, cv2.ROTATE_90_CLOCKWISE)
-    dst = cv2.imread("../../img/2.jpeg")
+    src = cv2.imread("/zebra.png")
+    src_rotation = cv2.rotate(src, cv2.ROTATE_90_CLOCKWISE)
+    #dst = cv2.imread("../../img/6.png")
 
     kp1, des1 = SIFT(src)
-    kp2, des2 = SIFT(dst)
+    kp2, des2 = SIFT(src_rotation)
 
     ## Matching 부분 ## 
     bf = cv2.BFMatcher_create(cv2.NORM_HAMMING, crossCheck=True)
@@ -157,7 +157,7 @@ def main():
     matches = bf.match(des1, des2)
     matches = sorted(matches, key = lambda x:x.distance)
 
-    result = cv2.drawMatches(src, kp1, dst, kp2, matches[:20], outImg=None, flags=2)
+    result = cv2.drawMatches(src, kp1, src_rotation, kp2, matches[:20], outImg=None, flags=2)
     
     # 결과의 학번 작성하기!
     cv2.imshow('output', result)
