@@ -1,4 +1,4 @@
-from __future__ import print_function
+#from __future__ import print_function
 import cv2
 import numpy as np
  
@@ -18,8 +18,7 @@ def alignImages(im1, im2):
  
   # Match features.
   matcher = cv2.DescriptorMatcher_create(cv2.DESCRIPTOR_MATCHER_BRUTEFORCE_HAMMING)
-  #matches = []
-  matches = matcher.match(descriptors1, descriptors2, None)
+  matches = list(matcher.match(descriptors1, descriptors2, None))
  
   # Sort matches by score
   matches.sort(key=lambda x: x.distance, reverse=False)
@@ -49,13 +48,11 @@ def alignImages(im1, im2):
 if __name__ == '__main__':
  
   # Read reference image
-  refFilename = "/Users/dongheon97/Desktop/pic_src.png"
-  print("Reading reference image : ", refFilename)
+  refFilename = "/Users/dongheon97/Desktop/target.png"
   imReference = cv2.imread(refFilename, cv2.IMREAD_COLOR)
  
   # Read image to be aligned
-  imFilename = "/Users/dongheon97/Desktop/pic_dst.png"
-  print("Reading image to align : ", imFilename);
+  imFilename = "/Users/dongheon97/Desktop/target_test1.jpg"
   im = cv2.imread(imFilename, cv2.IMREAD_COLOR)
  
   print("Aligning images ...")
