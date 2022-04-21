@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.oshi:oshi-json:3.4.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.oshi/oshi-json/3.4.2/30b223f7746ab8482e85b83d358a5b056511a83c/oshi-json-3.4.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.oshi/oshi-json/3.4.2/efdd09e9153d9fc86a52728d29652cd8aec56e8/oshi-json-3.4.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.oshi/oshi-json/3.4.2/cda85dd0edd57e4c3f6937cc5dae6f89cb7a49c8/oshi-json-3.4.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
