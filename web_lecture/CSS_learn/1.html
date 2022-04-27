@@ -3,24 +3,31 @@
     <head>
         <title>WEB1 - HTML</title> <!-- Web page title not file name '1.html' -->
         <meta charset="'utf-8"> <!-- open using utf-8 -->
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <h1><a href="index.html">WEB</a></h1>
-        <ol> <!-- parent of list -->
-            <li><a href="1.html">HTML</a></li> <!-- list -->
-            <li><a href="2.html">CSS</a></li>
-            <li><a href="3.html">JavaScript</a></li>
-        </ol>
+        <div id="grid">
+            <ol> <!-- parent of list -->
+                <li><a href="1.html" class="saw" id="active">HTML</a></li> <!-- list -->
+                <li><a href="2.html">CSS</a></li>
+                <li><a href="3.html">JavaScript</a></li>
+            </ol>
 
-        <h2>HTML/h2>
-        <p>
-            <!-- hypertext reference link, open new tap, tooltip : put on mouse pointer -->
-            <a href="https://gomming.tistory.com/31" target="_blank" title="html5 speicification"> 
-            Hypertext Markup Language
-            </a>
-             is the standard markup language for <strong>creating <u>web</u> pages </strong>and web applications.</p>
-        <img src = "img_example.png" width="60%">
-        <p style="margin-top:45px;">Today’s artificial intelligence still faces two major challenges. One is that, in most industries, data exists in the form of isolated islands. The other is the strengthening of data privacy and security. We propose a possible solution to these challenges: secure federated learning. Beyond the federated-learning framework first proposed by Google in 2016, we introduce a comprehensive secure federated-learning framework, which includes horizontal federated learning, vertical federated learning, and federated transfer learning. We provide definitions, architectures, and applications for the federated-learning framework, and provide a comprehensive survey of existing works on this subject. In addition, we propose building data networks among organizations based on federated mechanisms as an effective solution to allowing knowledge to be shared 
-        without compromising user privacy.</p>
+            <div id="article">
+                <h2>HTML/h2>
+                    <p>
+                        <!-- hypertext reference link, open new tap, tooltip : put on mouse pointer -->
+                        <a href="https://gomming.tistory.com/31" target="_blank" title="html5 speicification"> 
+                        Hypertext Markup Language
+                        </a>
+                         is the standard markup language for <strong>creating <u>web</u> pages </strong>and web applications.</p>
+                    <img src = "img_example.png" width="60%">
+                    <p style="margin-top:45px;">Today’s artificial intelligence still faces two major challenges. One is that, in most industries, data exists in the form of isolated islands. The other is the strengthening of data privacy and security. We propose a possible solution to these challenges: secure federated learning. Beyond the federated-learning framework first proposed by Google in 2016, we introduce a comprehensive secure federated-learning framework, which includes horizontal federated learning, vertical federated learning, and federated transfer learning. We provide definitions, architectures, and applications for the federated-learning framework, and provide a comprehensive survey of existing works on this subject. In addition, we propose building data networks among organizations based on federated mechanisms as an effective solution to allowing knowledge to be shared 
+                    without compromising user privacy.</p>
+            </div>
+        </div>
+        
+        
     </body>
 </html>
