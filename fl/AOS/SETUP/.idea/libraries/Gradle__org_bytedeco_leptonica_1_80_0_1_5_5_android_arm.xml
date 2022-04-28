@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.bytedeco:leptonica:1.80.0-1.5.5:android-arm">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.bytedeco/leptonica/1.80.0-1.5.5/b3c0905a00604676bf1e4bae48365e480a336f8a/leptonica-1.80.0-1.5.5-android-arm.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.bytedeco/leptonica/1.80.0-1.5.5/f545263fe98fef6f69238c6a1e73205fbb78fd8c/leptonica-1.80.0-1.5.5-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.bytedeco/leptonica/1.80.0-1.5.5/b91db1aca5f05f56db8fa1cadfb09ad1bc987770/leptonica-1.80.0-1.5.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
