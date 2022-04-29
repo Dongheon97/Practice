@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Iris</string>
+    <string name="petal_width">petal_width</string>
+    <string name="sepal_length">sepal_length</string>
+    <string name="pw">pw</string>
+    <string name="pl">pl</string>
+    <string name="sl">sl</string>
+    <string name="petal_length">petal_length</string>
+    <string name="sepal_width">sepal_width</string>
+    <string name="setosa">setosa</string>
+    <string name="versicolor">versicolor</string>
+    <string name="virginica">virginica</string>
+    <string name="oo">OO</string>
+    <string name="classify_iris">classify_iris</string>
+</resources>
