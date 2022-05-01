@@ -39,7 +39,7 @@ else:
     print(d[m])
 
 
-# L
+# Longest Increasing Subsequence
 n = int(input())
 array = list(map(int, input().split()))
 array.reverse()

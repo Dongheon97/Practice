@@ -1,4 +1,5 @@
 from collections import deque
+from turtle import Turtle
 
 def dfs(graph, v, visited):
     # 현재 노드 방문처리
@@ -8,6 +9,25 @@ def dfs(graph, v, visited):
     for i in graph[v]:
         if not visited[i]:
             dfs(graph, i, visited)
+
+def dfs(graph, v, visited):
+    visited[v] = True
+    print(v, end=" ")
+    for i in graph[v]:
+        if not visited[i]:
+            dfs(graph, i, visited)
+
+def bfs(graph, start, visited):
+    queue = deque([start])
+    visited[start] = True
+    while queue:
+        v = queue.popleft()
+        print(v, end=" ")
+        for i in graph[v]:
+            if not visited[i]:
+                visited[v] = True
+                queue.append(i)
+    
 def ddfs(x, y):
     if x<=-1 or x>=n or y<=-1 or y>=m:
         return False
@@ -20,24 +40,24 @@ def ddfs(x, y):
         return True
     return False
 
-def bbfs(x, y):
+def bbfs(sx, sy):
     queue = deque()
-    queue.append((x, y))
+    queue.append((sx, sy))
     while queue:
-        queue.popleft()
+        ix, iy = queue.popleft()
+        
         for i in range(4):
-            nx = x + dx[i]
-            ny = y + dy[i]
-
-            if(nx < 0 or nx >=n or ny<0 or ny>=m):
+            nx = ix + dx[i]
+            ny = iy + dy[i]
+            if nx<0 or nx>=n or ny<0 or ny>=m:
                 continue
             if graph[nx][ny] == 0:
                 continue
             if graph[nx][ny] == 1:
-                graph[nx][ny]= graph[x][y]+1
+                graph[nx][ny] = graph[ix][iy] + 1
                 queue.append((nx, ny))
-    return queue[n-1][m-1]
-    
+    return graph[n-1][m-1]
+
 def bfs(graph, start, visited):
     # queue
     queue = deque([start])
@@ -53,8 +73,6 @@ def bfs(graph, start, visited):
             if not visited[i]:
                 queue.append(i)
                 visited[i] = True
-
-
 
 if __name__=="__main__":
     d_graph = [

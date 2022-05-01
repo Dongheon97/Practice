@@ -9,7 +9,7 @@ def rec_binary(array, target, start, end):
     else:
         return rec_binary(array, target, mid+1, end)
     
-def binary(array, target, start, end):
+def binary(array, target, start, end):                                      # O(logN)
     while(start <= end):
         mid = (start+end) // 2
         if(array[mid] == target):
