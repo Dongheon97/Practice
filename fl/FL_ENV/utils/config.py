@@ -47,23 +47,26 @@ class Config(object):
         self.fl = namedtuple('fl', fields)(*params)
         assert 0 < self.fl.target_accuracy < 1
         
+        '''
         # -- Model --
         self.dataset = config['dataset']
+        '''
 
         # -- Paths --
         fields = ['data', 'model', 'reports']
         defaults = ('./data', './models', None)
         params = [config['paths'].get(field, defaults[i])
                   for i, field in enumerate(fields)]
+
         # Set specific model path
         params[fields.index('model')] += '/' + self.dataset
 
         self.paths = namedtuple('paths', fields)(*params)
 
+        '''
         # -- Server --
         self.server = config['server']
-
+        '''
 
 if __name__ == "__main__":
-    config = Config("configs/MNIST/mnist.json")
-    print(config.data.IID)
+    config = Config("configs/params.json")
