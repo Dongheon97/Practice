@@ -24,7 +24,6 @@ class Client:
         return model
 
     def load_train_data(self):
-        ## TO DO : GET_TRAIN_DATA
         trainset, testset = get_data(self.config.dataset, self.config)
         self.train_loader = DataLoader(trainset, batch_size=self.config.fl.batch_size)
         self.test_loader = DataLoader(testset, batch_size=self.config.fl.batch_size)
@@ -78,7 +77,7 @@ class Client:
             logging.info("Weights Size: {}".format(sys.getsizeof(self.local_weights)))
 
             logging.info("Epochs: {}, Loss: {:.4f}, Train_Acc: {:.4f}, Test_Acc: {:.4f}".format(e+1, epoch_loss, epoch_acc, test_acc))
-        info = {"weights": self.local_weights, "loss": epoch_loss, 
+        #info = {"weights": self.local_weights, "loss": epoch_loss, 
                 "corrects": running_corrects, "len": len(self.train_loader.dataset)}
         '''
         # Save only weights
@@ -117,16 +116,20 @@ class Client:
 
     def load_weights(self, givenPath):
         model_load = torch.load(givenPath)
-
+        '''
         for name, param in model_load.named_parameters():
                 logging.info("name: {}".format(name))
-                #logging.info(param[0].type())
+                logging.info("name tpye: {}".format(type(name)))
+                logging.info(param[0].type())
                 logging.info(type(param))
                 logging.info("param.shape: {}".format(param.shape))
                 #logging.info("param.requires_grad: {}".format(param.requires_grad))
                 logging.info("=====")
-
+        '''
         weights = model_load.state_dict()
+        logging.info("dict length: {}".format(len(weights)))
+        logging.info(weights.keys())
+        logging.info(weights.values())
         return weights
 
         #weights = model_load.load_state_dict(givenPath)
