@@ -17,7 +17,7 @@ class TORCH_NET(nn.Module):
         )
 
     def forward(self, x):
-        x = self.pool(F.relu(self.conv1(s)))
+        x = self.pool(F.relu(self.conv1(x)))
         x = self.pool(F.relu(self.conv2(x)))
         x = x.view(-1, 4*4*64)
         x = self.fc(x)

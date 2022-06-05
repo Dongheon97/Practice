@@ -45,12 +45,10 @@ class Config(object):
         params = [config['federated_learning'].get(field, defaults[i])
                   for i, field in enumerate(fields)]
         self.fl = namedtuple('fl', fields)(*params)
-        assert 0 < self.fl.target_accuracy < 1
+        #assert 0 < self.fl.target_accuracy < 1
         
-        '''
         # -- Model --
         self.dataset = config['dataset']
-        '''
 
         # -- Paths --
         fields = ['data', 'model', 'reports']
