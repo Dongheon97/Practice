@@ -4,10 +4,11 @@ from models import models
 from utils.config import Config
 from utils.data import get_data
 from torch.utils.data import DataLoader
-#import copy
 import numpy as np
 import logging
 import pickle
+import os
+import copy
 
 class Updater:
     def __init__(self, config):
@@ -16,6 +17,7 @@ class Updater:
         self.model = self.load_model()
         self.test_loader = self.load_test_data()
         self.global_weights = None
+        self.init_weights = None
 
     def load_model(self):
         logging.info('Load Model: {}'.format(self.config.dataset))
@@ -27,9 +29,12 @@ class Updater:
         test_loader = DataLoader(testset, batch_size=32, shuffle=True)
         return test_loader
 
-    def test(self):
+    def test(self, is_init):
         # set_weights
-        self.model.load_state_dict(self.global_weights)
+        if(is_init):
+            self.model.load_state_dict(self.init_weights)
+        else:
+            self.model.load_state_dict(self.global_weights)
         
         corrects = 0
         test_loss = 0
@@ -39,7 +44,7 @@ class Updater:
         criterion = nn.CrossEntropyLoss()
 
         #dataloader = DataLoader(self.testset, batch_size=32, shuffle=True)
-        for inputs, labels in self.test_loader:
+        for batch_id, (inputs, labels) in enumerate(self.test_loader):
             loss = 0
             inputs = inputs.to(device)
             labels = labels.to(device)
@@ -56,11 +61,35 @@ class Updater:
 
         return acc, avg_loss
 
+    def fed_avg(self, dir_path):
+        # get_file_list of Dir
+        local_weights = []
+        file_list = os.listdir(dir_path)
+
+        client_num = len(file_list)
+        logging.info("Client_Num: {}".format(client_num))
+
+        for i in range(client_num):
+            file_path = dir_path + file_list[i]
+            local_weights.append(self.pickle_to_weights(file_path))
+        
+        w_avg = copy.deepcopy(local_weights[0])
+        for k in w_avg.keys():
+            for i in range(1, client_num):
+                w_avg[k] += local_weights[i][k]
+            w_avg[k] /= float(client_num)
+        self.global_weights = w_avg
+
     def pickle_to_weights(self, filePath):
         with open(filePath, 'rb') as inputfile:
             weights = pickle.load(inputfile)
-        logging.info(weights.keys())
-        self.global_weights = weights
+        return weights
+
+    def set_init_weights(self, filePath):
+        with open(filePath, 'rb') as inputfile:
+            weights = pickle.load(inputfile)
+        logging.info("Init Weights Test")
+        self.init_weights = weights
 
 
 if __name__=="__main__":
@@ -68,9 +97,19 @@ if __name__=="__main__":
         format='[%(levelname)s][%(asctime)s]: %(message)s',
         level=getattr(logging, "INFO"), datefmt='%H:%M:%S'
     )
-    PATH = './models/2.pickle'
+    PATH = './dummy/'
+    lst = os.listdir(PATH)
     config = Config("./configs/params.json")
+
+    initTester = Updater(config)
+    initTester.set_init_weights(PATH+str(lst[0]))
+    logging.info("Init Weights Accuracy using '{}'".format(lst[0]))
+    initTester.test(True)
+
+    print()
+
     updater = Updater(config)
-    updater.pickle_to_weights(PATH)
-    updater.test()
+    logging.info("Global Weights Accuracy")
+    updater.fed_avg(PATH)
+    updater.test(False)
 

@@ -58,3 +58,5 @@ if __name__=='__main__':
     csocket = CSocket(IP, PORT)
     csocket.send_pickle(PATH)
 
+    time.sleep(100)
+
