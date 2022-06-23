@@ -6,19 +6,22 @@ import java.net.Socket;
 import java.net.UnknownHostException; 
 
 public class client{ 
-    public static String IP = "127.0.0.1";
-    public static int port = 5555;
+    public static String IP = "168.188.128.94";
+    public static int port = 8081;
     public static String path = "./sample/client/";
+    public static int fileCount = 0;
 
     public static void main(String[] args) { 
         // Get File Number
-        int fileCount=getFileCount(IP, port);
-
+        fileCount=getFileCount(IP, port);
+        
         int count=0;
+        
+        //int count=5;
 
         Socket socket = null; 
         FileOutputStream fileOutputStream = null; 
-
+/*
         // Get Files
         do{
             try { 
@@ -60,6 +63,7 @@ public class client{
             }
             count+=1;
         }while(count<fileCount);    
+*/
         System.out.println("\nDisconnected!");
     } 
 

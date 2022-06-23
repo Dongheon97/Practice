@@ -39,11 +39,9 @@ public class server {
             do{
                 try { 
                     socket = serverSocket.accept(); 
-                            System.out.println("Inet address: "+socket.getInetAddress());  
-        System.out.println("Port number: "+socket.getLocalPort());  
                     OutputStream outputStream = socket.getOutputStream(); 
     
-                    String target = path+Integer.toString(count+1)+".png";
+                    String target = path+Integer.toString(count+1)+".jpg";
     
                     fileInputStream = new FileInputStream(target); 
                     byte[] dataBuff = new byte[10000]; 
@@ -79,9 +77,8 @@ public class server {
                 }
                 count+=1;
             }while(count<fileCount);
-            System.out.println("\n12312312Disconnect\n");
 
-            //getArray();
+            getArray();
 
             System.out.println("\nDisconnect\n");
         }
@@ -121,6 +118,7 @@ public class server {
             InputStream osInit = initSocket.getInputStream();
             ObjectInputStream ois = new ObjectInputStream(osInit);
             Object get_object = (Object) ois.readObject();
+
             System.out.println(get_object);
             ois.close();
             osInit.close();

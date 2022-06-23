@@ -5,10 +5,11 @@ import java.io.IOException;
 import java.io.OutputStream; 
 import java.net.ServerSocket; 
 import java.net.Socket; 
+
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 
-public class server { 
+public class ts { 
     public static int port = 8080;
     public static ServerSocket serverSocket = null; 
     public static String path = "./sample/server/";
@@ -22,14 +23,17 @@ public class server {
         }
         System.out.println("Wait ... ");
 
+        getArray();
+        /*
         while(true){
             File dir = new File(path);
             int fileCount = folderFileCount(dir);
+            
             //Socket initSock = null;
     
             // Send file count
             sendFileCount(fileCount);
-            
+    
             FileInputStream fileInputStream = null; 
             Socket socket = null; 
     
@@ -39,11 +43,9 @@ public class server {
             do{
                 try { 
                     socket = serverSocket.accept(); 
-                            System.out.println("Inet address: "+socket.getInetAddress());  
-        System.out.println("Port number: "+socket.getLocalPort());  
                     OutputStream outputStream = socket.getOutputStream(); 
     
-                    String target = path+Integer.toString(count+1)+".png";
+                    String target = path+Integer.toString(count+1)+".jpg";
     
                     fileInputStream = new FileInputStream(target); 
                     byte[] dataBuff = new byte[10000]; 
@@ -79,12 +81,9 @@ public class server {
                 }
                 count+=1;
             }while(count<fileCount);
-            System.out.println("\n12312312Disconnect\n");
-
-            //getArray();
-
             System.out.println("\nDisconnect\n");
         }
+        */
     } 
 
     public static int folderFileCount(File givenDir){
@@ -107,7 +106,7 @@ public class server {
             OutputStream osInit = initSocket.getOutputStream();
             DataOutputStream dosInit = new DataOutputStream(osInit);
             dosInit.writeInt(givenFileCount);
-            System.out.println("File Number '" + givenFileCount+"' is transmitted!\n");
+            System.out.println("File Number is transmitted!\n");
             dosInit.close();
             osInit.close();
             initSocket.close();
@@ -115,12 +114,14 @@ public class server {
             e.printStackTrace();
         }
     }
+
     public static void getArray(){
         try{
             Socket initSocket = serverSocket.accept();
             InputStream osInit = initSocket.getInputStream();
             ObjectInputStream ois = new ObjectInputStream(osInit);
             Object get_object = (Object) ois.readObject();
+
             System.out.println(get_object);
             ois.close();
             osInit.close();
@@ -130,3 +131,4 @@ public class server {
         }
     }
 }
+
