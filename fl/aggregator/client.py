@@ -80,10 +80,9 @@ class Client:
         #info = {"weights": self.local_weights, "loss": epoch_loss, 
                 "corrects": running_corrects, "len": len(self.train_loader.dataset)}
         '''
-        # Save only weights
-        torch.save(self.local_weights, path+"weights_only.pth")
-        # Save full model
-        torch.save(self.model, path+"full.pth")
+        # Save converted weights using pickle
+        with open('local.pickle', 'wb') as f:
+            pickle.dump(self.local_weights, f)
         '''
         return info
 

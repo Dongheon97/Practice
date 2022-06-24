@@ -1,3 +1,4 @@
+import pickle5 as pickle
 from torch import nn, optim
 import torch
 from models import models
@@ -6,7 +7,7 @@ from utils.data import get_data
 from torch.utils.data import DataLoader
 import numpy as np
 import logging
-import pickle
+#import pickle
 import os
 import copy
 
@@ -71,7 +72,7 @@ class Updater:
 
         for i in range(client_num):
             file_path = dir_path + file_list[i]
-            local_weights.append(self.pickle_to_weights(file_path))
+            local_weights.append(self.load_weights(file_path))
         
         w_avg = copy.deepcopy(local_weights[0])
         for k in w_avg.keys():
@@ -80,7 +81,15 @@ class Updater:
             w_avg[k] /= float(client_num)
         self.global_weights = w_avg
 
-    def pickle_to_weights(self, filePath):
+        # Save aggregated global weights
+        self.save_weights(self.global_weights, './aggregator/globals/global.pickle')
+
+    def save_weights(self, givenWeights, PATH):
+        with open(PATH, 'wb') as f:
+            pickle.dump(givenWeights, f)
+
+    def load_weights(self, filePath):
+        # Load local weights from .pickle
         with open(filePath, 'rb') as inputfile:
             weights = pickle.load(inputfile)
         return weights
@@ -97,9 +106,9 @@ if __name__=="__main__":
         format='[%(levelname)s][%(asctime)s]: %(message)s',
         level=getattr(logging, "INFO"), datefmt='%H:%M:%S'
     )
-    PATH = './dummy/'
+    PATH = './aggregator/received/'
     lst = os.listdir(PATH)
-    config = Config("./configs/params.json")
+    config = Config("./aggregator/configs/params.json")
 
     initTester = Updater(config)
     initTester.set_init_weights(PATH+str(lst[0]))

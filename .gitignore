@@ -15,6 +15,9 @@
 .idea/**/shelf
 /idea
 
+*-ubyte
+*-ubyte.gz
+
 # Generated files
 .idea/**/contentModel.xml
 
