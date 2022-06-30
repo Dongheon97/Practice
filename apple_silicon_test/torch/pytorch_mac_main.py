@@ -98,7 +98,8 @@ def main():
 
     torch.manual_seed(args.seed)
 
-    device = torch.device("cuda" if use_cuda else "cpu")
+    #device = torch.device("mps" if use_cuda else "cpu")
+    device = "mps" if torch.backends.mps.is_available() else "cpu"
 
     train_kwargs = {'batch_size': args.batch_size}
     test_kwargs = {'batch_size': args.test_batch_size}
