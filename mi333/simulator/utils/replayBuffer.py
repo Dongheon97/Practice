@@ -8,7 +8,7 @@ class ReplayBuffer(object):
 
     def push(self, state, action, reward, next_state, done):
         state = np.expand_dims(state, 0)
-        print(f'input state: {state}, input done: {done}')
+        #:print(f'input state: {state}, input done: {done}')
         next_state = np.expand_dims(next_state, 0)
         self.buffer.append((state, action, reward, next_state, done))
 

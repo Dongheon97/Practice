@@ -2,7 +2,7 @@
 """
 Shows how to toss a capsule to a container.
 """
-from mujoco_py import load_model_from_path, MjSim, MjViewer
+from mujoco_py import load_model_from_path, MjSim, MjSimState, MjViewer
 import os
 import numpy as np
 import torch
@@ -39,32 +39,34 @@ class MjCartPole():
         else:
             return autograd.Variable(*args, **kwargs)
 
-    def reorder_state(self, qpos, qvel):
+    def order_state(self, qpos, qvel):
         # qpos: [cart_position, pole_angle]
         # qvel: [cart_velocity, pole_angular_velocity]
         # -> [cart_position, cart_velocity, pole_angle, pole_angular_velocity]
-        reordered = list(it.chain(*zip(qpos, qvel)))
-        return reordered
+        ordered = list(it.chain(*zip(qpos, qvel)))
+        return ordered
+
+    def reorder_state(self, ordered):
+        qpos = [ordered[0], ordered[2]]
+        qvel = [ordered[1], ordered[3]]
+        return np.array(qpos), np.array(qvel)
 
     def is_fall(self, curr_state):
         # -pi/15 <= pole_angle(rad) <= pi/15
         if(curr_state[2] >= -0.20944 and curr_state[2] <= 0.20944):
             return False
         else:
+            print(f'is_fall() - current state: {curr_state}')
+            print(f'is_fall() - pole_angle: {curr_state[2]}')
             return True
-
-    def to_tensor(self, lst):
-        lst = np.array(lst)
-        lst = torch.Tensor(lst)
-        return lst
 
     def mj_step(self, givenAction):
         # set_action -> step -> next_state, reward, done 
-        self.sim.data.ctrl[:] = givenAction
+        self.sim.data.ctrl[:] = givenAction/2
         self.sim.step()
         
         obv = self.sim.get_state()
-        next_state = self.reorder_state(obv[1], obv[2])
+        next_state = self.order_state(obv[1], obv[2])
         #next_state = self.to_tensor(next_state)
         done = self.is_fall(next_state)
         reward = 1
@@ -77,7 +79,11 @@ class MjCartPole():
         pa = random.uniform(-0.048, 0.048)
         pv = random.uniform(-0.048, 0.048)
         reset_state = [cp, cv, pa, pv]
-        print(reset_state)
+        qpos, qvel = self.reorder_state(reset_state)
+        old_state = self.sim.get_state()
+        new_state = MjSimState(old_state.time, qpos, qvel, old_state.act, old_state.udd_state)
+        self.sim.set_state(new_state)
+        print(f'reset_state: {reset_state}')
         #reset_state = self.to_tensor(reset_state)
         return np.array(reset_state)
 
@@ -114,37 +120,44 @@ class MjCartPole():
         all_rewards = []
         episode_reward = 0
         
-        #viewer = MjViewer(self.sim)
+        viewer = MjViewer(self.sim)
         init_state = self.sim.get_state()
-        state = self.reorder_state(init_state[1], init_state[2])
+        state = self.order_state(init_state[1], init_state[2])
         #print(f"state: {state}")
         for frame_idx in range(1, self.num_frames + 1):
             epsilon = self.epsilon_by_frame(frame_idx)
+            print(f'check state: {state}')
             sampling = self.model.act(state, epsilon)
             if(sampling == 0):
                 action = -1
             else:
                 action = 1
+            print(action)
             next_state, reward, done = self.mj_step(action)
+
             #print(f"next state: {next_state}")
             self.replay_buffer.push(state, action, reward, next_state, done)
             state = next_state
             episode_reward += reward
 
             if done:
+                print(f'\nframe_idx: {frame_idx}\n')
                 state = self.mj_reset()
+                print(f'if done - reset_state: {state}')
                 all_rewards.append(episode_reward)
                 episode_reward = 0
             
             if len(self.replay_buffer) > self.batch_size:
                 loss = self.compute_td_loss(self.batch_size)
                 losses.append(loss.item())
+            
+            viewer.render()
 
         print(all_rewards)
     
 if __name__=="__main__":
     PATH = '/Users/dongheon97/dev/Practice/mi333/simulator/xmls/cartpole.xml'
-    num_frames = 35
+    num_frames = 1000
     batch_size = 32
     gamma = 0.99
     xml_file = load_model_from_path(PATH)
