@@ -53,11 +53,6 @@ class MjCartPole():
         else:
             return True
 
-    def to_tensor(self, lst):
-        lst = np.array(lst)
-        lst = torch.Tensor(lst)
-        return lst
-
     def mj_step(self, givenAction):
         # set_action -> step -> next_state, reward, done 
         self.sim.data.ctrl[:] = givenAction
@@ -65,21 +60,10 @@ class MjCartPole():
         
         obv = self.sim.get_state()
         next_state = self.reorder_state(obv[1], obv[2])
-        #next_state = self.to_tensor(next_state)
+        
         done = self.is_fall(next_state)
         reward = 1
-        return np.array(next_state), reward, done
-
-    def mj_reset(self):
-        # -0.048 <= cart_position, cart_velocity, pole_angle, pole_angular_velocity <= +0.048
-        cp = random.uniform(-0.048, 0.048)
-        cv = random.uniform(-0.048, 0.048)
-        pa = random.uniform(-0.048, 0.048)
-        pv = random.uniform(-0.048, 0.048)
-        reset_state = [cp, cv, pa, pv]
-        print(reset_state)
-        #reset_state = self.to_tensor(reset_state)
-        return np.array(reset_state)
+        return next_state, reward, done
 
     def compute_td_loss(self, batch_size):
         state, action, reward, next_state, done = \
@@ -114,10 +98,11 @@ class MjCartPole():
         all_rewards = []
         episode_reward = 0
         
-        #viewer = MjViewer(self.sim)
+        viewer = MjViewer(self.sim)
         init_state = self.sim.get_state()
         state = self.reorder_state(init_state[1], init_state[2])
         #print(f"state: {state}")
+        '''
         for frame_idx in range(1, self.num_frames + 1):
             epsilon = self.epsilon_by_frame(frame_idx)
             sampling = self.model.act(state, epsilon)
@@ -132,7 +117,7 @@ class MjCartPole():
             episode_reward += reward
 
             if done:
-                state = self.mj_reset()
+                state = self.sim.set_state(init_state)
                 all_rewards.append(episode_reward)
                 episode_reward = 0
             
@@ -141,10 +126,31 @@ class MjCartPole():
                 losses.append(loss.item())
 
         print(all_rewards)
-    
+        '''
+        while True:
+            episode_reward = 0
+            self.sim.set_state(init_state)
+            for i in range(10000):
+                '''
+                if((i%2) == 0):
+                    action = 0.5
+                else:
+                    action = -0.5
+                '''
+                action = -1
+                next_state, reward, done = self.mj_step(action)
+                episode_reward += reward
+                #print(f'next_state: {next_state}')
+                #print(f'Episode_reward: {episode_reward}, Frame_reward: {reward}')
+                #print(f'done: {done}')
+                print(next_state)
+                viewer.render()
+            if os.getenv('TESTING') is not None:
+                break
+
 if __name__=="__main__":
     PATH = '/Users/dongheon97/dev/Practice/mi333/simulator/xmls/cartpole.xml'
-    num_frames = 35
+    num_frames = 500
     batch_size = 32
     gamma = 0.99
     xml_file = load_model_from_path(PATH)
