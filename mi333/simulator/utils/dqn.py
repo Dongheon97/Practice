@@ -30,12 +30,14 @@ class DQN(nn.Module):
 
     def act(self, state, epsilon):
         if random.random() > epsilon:
-            #state = self.Variable(torch.FloatTensor(state).unsqueeze(0), volatile=True)
+            state = self.Variable(torch.FloatTensor(state).unsqueeze(0), volatile=True)
+            '''
             with torch.no_grad():
                 state = self.Variable(torch.FloatTensor(state).unsqueeze(0))
+            '''
             q_value = self.forward(state)
-            # action = q_value.max(1)[1].data[0]
-            action = int(q_value.max(1)[1].data[0].cpu().int().numpy())
+            action = q_value.max(1)[1].data[0]
+            #action = int(q_value.max(1)[1].data[0].cpu().int().numpy())
         else:
             action = random.randrange(self.output)
         return action
